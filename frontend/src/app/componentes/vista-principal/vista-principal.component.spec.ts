@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ReservasComponent } from './reservas.component';
+import { VistaPrincipalComponent } from './vista-principal.component';
 
-describe('ReservasComponent', () => {
-  let component: ReservasComponent;
-  let fixture: ComponentFixture<ReservasComponent>;
+describe('VistaPrincipalComponent', () => {
+  let component: VistaPrincipalComponent;
+  let fixture: ComponentFixture<VistaPrincipalComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReservasComponent]
+      imports: [VistaPrincipalComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(ReservasComponent);
+    fixture = TestBed.createComponent(VistaPrincipalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

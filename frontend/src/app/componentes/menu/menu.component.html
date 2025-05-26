@@ -1,0 +1,33 @@
+<nav class="bg-white border-b border-gray-200 px-4 py-2.5 dark:bg-gray-900 dark:border-gray-700">
+  <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
+    <a href="#" class="flex items-center">
+      <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Mi App</span>
+    </a>
+    <div class="flex items-center md:order-2 relative">
+      <button (click)="dropdownOpen = !dropdownOpen" type="button" class="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false">
+        <img class="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo" />
+      </button>
+      <div *ngIf="dropdownOpen" class="z-50 absolute right-0 top-12 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">
+        <div class="px-4 py-3">
+          <span class="block text-sm text-gray-900 dark:text-white">Jese Leos</span>
+          <span class="block text-sm font-medium text-gray-500 truncate dark:text-gray-400">nameflowbite.com</span>
+        </div>
+        <ul class="py-2">
+          <li><a routerLink="/perfil" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-white">Perfil</a></li>
+          <li><a routerLink="/salas" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-white">Salas</a></li>
+          <li><a routerLink="/reservas" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-white">Reservas</a></li>
+          <li><a (click)="logout()" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-white cursor-pointer">Cerrar sesión</a></li>
+        </ul>
+      </div>
+      <button (click)="toggleMobileMenu()" type="button" class="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+        <i class="fas" [ngClass]="mobileMenuOpen ? 'fa-times' : 'fa-bars'"></i>
+      </button>
+    </div>
+    <div [ngClass]="{'hidden': !mobileMenuOpen}" class="items-center justify-between w-full md:flex md:w-auto md:order-1">
+      <ul class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+        <li><a routerLink="/" routerLinkActive="text-blue-700" class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white dark:hover:text-white dark:hover:bg-gray-700">Inicio</a></li>
+        <li><a routerLink="/about" routerLinkActive="text-blue-700" class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white dark:hover:text-white dark:hover:bg-gray-700">Acerca</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>

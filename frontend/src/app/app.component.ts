@@ -1,13 +1,28 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { MenuComponent } from './componentes/menu/menu.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  selector: 'app-root',
+  template: `
+    <div *ngIf="!isLoginPage">
+      <!-- Menú visible solo si NO estamos en /login -->
+      <app-menu></app-menu>
+    </div>
+
+    <!-- Siempre muestra el contenido de la ruta activa -->
+    <router-outlet></router-outlet>
+  `,
+  imports: [RouterModule, MenuComponent, CommonModule],
 })
 export class AppComponent {
-  title = 'frontend';
+  isLoginPage: boolean = false;
+
+  constructor(private router: Router) {
+    this.router.events.subscribe(() => {
+      this.isLoginPage = this.router.url === '/login';
+    });
+  }
 }
