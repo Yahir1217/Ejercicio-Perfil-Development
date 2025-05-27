@@ -12,7 +12,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:api')->group(function () {
     Route::get('/usuario', function () {
         return auth()->user();
-    });
+    }); 
 
     Route::apiResource('salas', SalaController::class);
     Route::apiResource('reservas', ReservaController::class);

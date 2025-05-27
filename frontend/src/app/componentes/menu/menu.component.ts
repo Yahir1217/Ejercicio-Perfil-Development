@@ -1,13 +1,14 @@
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-menu',
   standalone: true,
   templateUrl: './menu.component.html',
-  imports: [CommonModule] 
+  imports: [CommonModule, RouterModule, HttpClientModule] 
 })
 export class MenuComponent {
   constructor(private router: Router) {}

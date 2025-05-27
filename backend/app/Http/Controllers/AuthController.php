@@ -9,15 +9,16 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        $credentials = $request->only(['email', 'password']);
-
+        $credentials = $request->only('email', 'password');
+    
         if (!$token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Credenciales inválidas'], 401);
+            return response()->json(['error' => 'Unauthorized'], 401);
         }
-
+    
         return response()->json([
-            'token' => $token,
-            'user_id' => auth()->user()->id,
+            'token' => $token, // ✅ ahora sí es el JWT real
+            'user_id' => auth()->id()
         ]);
     }
+    
 }

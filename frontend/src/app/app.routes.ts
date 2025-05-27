@@ -13,4 +13,15 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./componentes/vista-principal/vista-principal.component').then(m => m.VistaPrincipalComponent),
   },
+  {
+    path: 'salas',
+    loadComponent: () =>
+      import('./componentes/salas/salas.component').then(m => m.SalasComponent),
+  },
+  {
+    path: 'reservas',
+    loadComponent: () =>
+      import('./componentes/reservas/reservas.component').then(m => m.ReservasComponent),
+  },
+  
 ];

@@ -14,8 +14,17 @@
         </div>
         <ul class="py-2">
           <li><a routerLink="/perfil" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-white">Perfil</a></li>
-          <li><a routerLink="/salas" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-white">Salas</a></li>
-          <li><a routerLink="/reservas" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-white">Reservas</a></li>
+          <li>
+            <a [routerLink]="'/salas'" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-white">
+              Salas
+            </a>
+          </li>
+          <li>
+            <a [routerLink]="'/reservas'" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-white">
+              Reservas
+            </a>
+          </li>
+          
           <li><a (click)="logout()" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-white cursor-pointer">Cerrar sesión</a></li>
         </ul>
       </div>

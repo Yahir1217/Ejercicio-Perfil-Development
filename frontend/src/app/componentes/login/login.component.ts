@@ -4,12 +4,13 @@ import { AuthService } from '../../servicios/auth.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   templateUrl: './login.component.html',
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, HttpClientModule],
 })
 export class LoginComponent {
   email: string = '';
@@ -21,10 +22,7 @@ export class LoginComponent {
     this.auth.login(this.email, this.password).subscribe({
       next: (res) => {
         sessionStorage.setItem('token', res.token);
-
-        // Encriptar user_id (simple base64)
-        const encryptedId = btoa(res.user_id.toString());
-        sessionStorage.setItem('user_id', encryptedId);
+        sessionStorage.setItem('user_id', res.user_id); // 👈 SIN encriptar
 
         Swal.fire({
           icon: 'success',
@@ -35,7 +33,7 @@ export class LoginComponent {
 
         this.router.navigate(['/inicio']);
       },
-      error: (err) => {
+      error: () => {
         Swal.fire({
           icon: 'error',
           title: 'Error',

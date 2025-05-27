@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
       <!-- Menú visible solo si NO estamos en /login -->
       <app-menu></app-menu>
     </div>
-
+ 
     <!-- Siempre muestra el contenido de la ruta activa -->
     <router-outlet></router-outlet>
   `,

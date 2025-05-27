@@ -9,7 +9,7 @@ class Sala extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nombre', 'descripcion'];
+    protected $fillable = ['nombre', 'capacidad', 'disponible'];
 
     public function reservas()
     {
