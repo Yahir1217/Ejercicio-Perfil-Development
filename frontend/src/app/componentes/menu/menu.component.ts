@@ -1,17 +1,58 @@
-import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import Swal from 'sweetalert2';
+import { ApiService } from '../../servicios/api.service';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-menu',
   standalone: true,
   templateUrl: './menu.component.html',
-  imports: [CommonModule, RouterModule, HttpClientModule] 
+  imports: [CommonModule, RouterModule, HttpClientModule]
 })
-export class MenuComponent {
-  constructor(private router: Router) {}
+export class MenuComponent implements OnInit {
+  mobileMenuOpen = false;
+  dropdownOpen = false;
+
+  nombreUsuario: string = '';
+  emailUsuario: string = '';
+
+  constructor(private router: Router, private apiService: ApiService) {}
+
+  ngOnInit(): void {
+    if (typeof window !== 'undefined') {
+      const token = sessionStorage.getItem('token');
+      if (token) {
+        const id = sessionStorage.getItem('user_id');
+        if (id) {
+          this.apiService.obtenerUsuario(id).subscribe({
+            next: (data) => {
+              this.nombreUsuario = data.name;
+              this.emailUsuario = data.email;
+            },
+            error: (err) => {
+              console.error('Error al obtener usuario:', err);
+            }
+          });
+        } else {
+          console.warn('ID de usuario no encontrado en sessionStorage.');
+        }
+      } else {
+        console.warn('Token no disponible todavía, no se llamó a obtenerUsuario().');
+      }
+    }
+  }
+  
+
+  toggleMobileMenu() {
+    this.mobileMenuOpen = !this.mobileMenuOpen;
+  }
+
+  closeMenus() {
+    this.dropdownOpen = false;
+    this.mobileMenuOpen = false;
+  }
 
   logout() {
     Swal.fire({
@@ -26,17 +67,5 @@ export class MenuComponent {
         this.router.navigate(['/login']);
       }
     });  
-  } 
-
-  mobileMenuOpen = false;
-  dropdownOpen = false;
-
-  toggleMobileMenu() {
-    this.mobileMenuOpen = !this.mobileMenuOpen;
-  }
-
-  closeMenus() {
-    this.dropdownOpen = false;
-    this.mobileMenuOpen = false;
   }
 }

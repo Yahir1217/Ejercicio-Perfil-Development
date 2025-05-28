@@ -84,6 +84,14 @@ export class ApiService {
     });
   }
 
+  obtenerUsuario(id: string) {
+    return this.http.get<any>(`http://localhost:8000/api/usuario/${id}`, {
+      headers: this.getAuthHeaders()
+    });
+  }
+  
+  
+
    // Métodos para Reservas
    obtenerReservas(): Observable<Reserva[]> {
     return this.http.get<Reserva[]>(this.apiUrlReserva, {
@@ -125,6 +133,8 @@ export class ApiService {
       headers: this.getAuthHeaders()
     });
   }
+
+
   
   
   

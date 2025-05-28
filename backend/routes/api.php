@@ -34,5 +34,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/usuarios', [UsuarioController::class, 'store']); // Crear un nuevo usuario
     Route::put('/usuarios/{id}', [UsuarioController::class, 'update']); // Editar un usuario existente
     Route::delete('/usuarios/{id}', [UsuarioController::class, 'destroy']); // Eliminar un usuario
+    Route::get('/usuario/{id}', [UsuarioController::class, 'obtenerUsuario']);
+
 });
 

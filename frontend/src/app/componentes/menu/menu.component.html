@@ -5,12 +5,14 @@
     </a>
     <div class="flex items-center md:order-2 relative">
       <button (click)="dropdownOpen = !dropdownOpen" type="button" class="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300" aria-expanded="false">
-        <img class="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo" />
+        <div class="w-8 h-8 rounded-full bg-green-700 text-white flex items-center justify-center font-bold uppercase">
+          {{ nombreUsuario.charAt(0) }}
+        </div>
       </button>
       <div *ngIf="dropdownOpen" class="z-50 absolute right-0 top-12 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow">
         <div class="px-4 py-3">
-          <span class="block text-sm text-gray-900">Jese Leos</span>
-          <span class="block text-sm font-medium text-gray-500 truncate">nameflowbite.com</span>
+          <span class="block text-sm text-gray-900">{{nombreUsuario}}</span>
+          <span class="block text-sm font-medium text-gray-500 truncate">{{emailUsuario}}</span>
         </div>
         <ul class="py-2">
           <li><a routerLink="/perfil" class="block px-4 py-2 hover:bg-green-100 text-gray-700">Perfil</a></li>

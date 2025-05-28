@@ -84,4 +84,19 @@ class UsuarioController extends Controller
 
         return response()->json(['message' => 'Usuario eliminado con éxito']);
     }
+
+    public function obtenerUsuario($id)
+    {
+        $usuario = User::find($id);
+
+        if (!$usuario) {
+            return response()->json(['error' => 'Usuario no encontrado'], 404);
+        }
+
+        return response()->json([
+            'name' => $usuario->name,
+            'email' => $usuario->email
+        ]);
+    }
+
 }
