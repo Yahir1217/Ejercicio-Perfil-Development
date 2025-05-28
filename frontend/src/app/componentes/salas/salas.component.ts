@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import { ApiService } from '../../servicios/api.service';
 import { Sala } from '../../interface/sala'; // Asegúrate que la ruta sea correcta
 
-@Component({
+@Component({ 
   selector: 'app-salas',
   standalone: true,
   imports: [CommonModule, FormsModule, HttpClientModule],

@@ -10,6 +10,13 @@ use Carbon\Carbon;
 
 class ReservaController extends Controller
 {
+    public function index2()
+    {
+        $reservas = Reserva::with(['user', 'sala'])->get();
+        return response()->json($reservas);
+    }
+    
+    
 
     public function index()
     {

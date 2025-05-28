@@ -27,7 +27,6 @@ export class ApiService {
     let token = '';
     if (this.isBrowser) {
       token = sessionStorage.getItem('token') || '';
-
     }
 
     return new HttpHeaders({
@@ -120,6 +119,14 @@ export class ApiService {
       { headers: this.getAuthHeaders() }
     );
   }
+
+  obtenerReservas2(): Observable<Reserva[]> {
+    return this.http.get<Reserva[]>(`${this.apiUrl}/reservas-2`, {
+      headers: this.getAuthHeaders()
+    });
+  }
+  
+  
   
   
 }

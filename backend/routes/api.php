@@ -26,6 +26,7 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/reservas/{reserva}', [ReservaController::class, 'destroy']); // ✅ Esta es la correcta
     Route::put('/reservas/{id}/asignar-sala', [ReservaController::class, 'asignarSala']);
     Route::get('/reservas/sin-sala', [ReservaController::class, 'reservasSinSala']);
+    Route::get('/reservas-2', [ReservaController::class, 'index2']);
 
 
     // Rutas para los usuarios
