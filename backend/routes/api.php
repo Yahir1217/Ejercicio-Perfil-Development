@@ -27,6 +27,7 @@ Route::middleware('auth:api')->group(function () {
     Route::put('/reservas/{id}/asignar-sala', [ReservaController::class, 'asignarSala']);
     Route::get('/reservas/sin-sala', [ReservaController::class, 'reservasSinSala']);
     Route::get('/reservas-2', [ReservaController::class, 'index2']);
+    Route::put('/reservas/{id}/liberar', [ReservaController::class, 'liberar']);
 
 
     // Rutas para los usuarios

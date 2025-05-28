@@ -145,5 +145,21 @@ public function asignarSala(Request $request, $id)
     return response()->json(['message' => 'Sala asignada correctamente']);
 }
 
+public function liberar($id)
+{
+    $reserva = Reserva::find($id);
+
+    if (!$reserva) {
+        return response()->json(['message' => 'Reserva no encontrada'], 404);
+    }
+
+    $reserva->activa = 'liberada';
+    $reserva->updated_at = now();
+    $reserva->save();
+    
+
+    return response()->json(['message' => 'Reserva liberada correctamente'], 200);
+}
+
 
 }

@@ -13,27 +13,27 @@ import { Usuario } from '../../interface/usuario';
   standalone: true,
   imports: [CommonModule, FormsModule, HttpClientModule],
   templateUrl: './reservas.component.html',
-  styleUrls: ['./reservas.component.css']  // Corrección del estilo
+  styleUrls: ['./reservas.component.css']  
 })
 export class ReservasComponent implements OnInit {
   reservas: Reserva[] = [];
-  reservasFiltradas: Reserva[] = [];  // Asegúrate de que sea del tipo correcto
+  reservasFiltradas: Reserva[] = [];  
   salas: Sala[] = [];
   usuarios: Usuario[] = [];
-  filtroBusqueda: string = '';  // Filtro de búsqueda
-  estadoFiltro: string = '';   // Filtro de estado
-  currentStep: number = 1;  // Variable para controlar el paso del carrucel
+  filtroBusqueda: string = '';  
+  estadoFiltro: string = '';   
+  currentStep: number = 1;  
   nuevaReserva: Partial<Reserva> = {
     sala_id: 0,
     user_id: 0,
     fecha: '',
     hora: '',
-    hora_inicio: '',  // <-- usa esta
+    hora_inicio: '',  
     fin: ''
   };
-    nuevoUsuario: Usuario = { id: 0, name: '', email: '' };  // Asegúrate de que el tipo Usuario esté bien definido
-  modalAbierto: boolean = false;  // Control de estado del modal
-  esEdicion: boolean = false;    // Indica si es edición o creación
+    nuevoUsuario: Usuario = { id: 0, name: '', email: '' };  
+  modalAbierto: boolean = false;  
+  esEdicion: boolean = false;    
   busquedaSala: string = '';
   busquedaCapacidad: number | null = null;
   busquedaNombreUsuario: string = '';
@@ -49,12 +49,40 @@ export class ReservasComponent implements OnInit {
       if (token) {
         this.obtenerSalas();
         this.obtenerUsuarios();
-        this.obtenerReservas(); // 👈 Faltaba esta línea para cargar las reservas al inicio
+        this.obtenerReservas(); 
       } else {
         console.warn('Token no disponible todavía, no se llamó a obtenerUsuarios().');
       }
     }
   }
+
+  liberarReserva(reserva: any) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Esta acción liberará la reserva seleccionada.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, liberar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.apiService.liberarReserva(reserva.id).subscribe({
+          next: () => {
+            Swal.fire('Liberada', 'La reserva se liberó correctamente.', 'success');
+            this.obtenerReservas(); 
+          },
+          error: (error) => {
+            console.error('Error al liberar reserva', error);
+            Swal.fire('Error', 'No se pudo liberar la reserva.', 'error');
+          }
+        });
+      }
+    });
+  }
+  
+  
 
   usuariosFiltrados() {
     return this.usuarios.filter(usuario => {
@@ -117,7 +145,7 @@ export class ReservasComponent implements OnInit {
       const nombreUsuario = reserva.user?.name?.toLowerCase() || '';
       const coincideSalaOUsuario = nombreSala.includes(filtro) || nombreUsuario.includes(filtro);
       
-      const estadoReserva = (reserva.activa || '').toLowerCase(); // puede ser 'activa', 'en_uso', 'liberada'
+      const estadoReserva = (reserva.activa || '').toLowerCase(); 
       const coincideEstado = estado === '' || estadoReserva === estado;
   
       return coincideSalaOUsuario && coincideEstado;
@@ -182,12 +210,12 @@ export class ReservasComponent implements OnInit {
       return false;
     }
   
-    const [añoSel, mesSel, diaSel] = this.nuevaReserva.fecha.split('-').map(Number); // yyyy-mm-dd
+    const [añoSel, mesSel, diaSel] = this.nuevaReserva.fecha.split('-').map(Number); 
     const fechaSeleccionada = new Date(añoSel, mesSel - 1, diaSel);
   
     const hoy = this.obtenerFechaActualZona('America/Mazatlan');
   
-    // Compara año, mes y día manualmente
+    
     if (
       fechaSeleccionada.getFullYear() < hoy.getFullYear() ||
       (fechaSeleccionada.getFullYear() === hoy.getFullYear() && fechaSeleccionada.getMonth() < hoy.getMonth()) ||
@@ -245,7 +273,7 @@ export class ReservasComponent implements OnInit {
   
     if (hora > 2 || (hora === 2 && minuto > 0)) {
       this.errorDuracion = 'La duración máxima es 02:00';
-      this.nuevaReserva.hora = '02:00';  // autoajuste si deseas mantener esto
+      this.nuevaReserva.hora = '02:00';  
       return false;
     }
   
@@ -305,7 +333,7 @@ export class ReservasComponent implements OnInit {
   
     const reserva = {
       sala_id: this.nuevaReserva.sala_id,
-      usuario_id: this.nuevaReserva.user_id, // ✅ Este es el correcto
+      usuario_id: this.nuevaReserva.user_id, 
       fecha: this.nuevaReserva.fecha,
       hora: this.nuevaReserva.hora,
       inicio: horaInicioStr,
@@ -365,7 +393,7 @@ export class ReservasComponent implements OnInit {
 
   abrirModal() {
     this.modalAbierto = true;
-    this.esEdicion = false; // Asigna 'false' si estás creando una nueva reserva
+    this.esEdicion = false; 
     this.nuevaReserva = {
       sala_id: 0,
       user_id: 0,
@@ -377,7 +405,7 @@ export class ReservasComponent implements OnInit {
 
   actualizarReserva(reserva: Reserva) {
     this.esEdicion = true;
-    this.nuevaReserva = { ...reserva };  // Carga la reserva para editar
+    this.nuevaReserva = { ...reserva }; 
     this.modalAbierto = true;
   }
 
@@ -412,7 +440,7 @@ export class ReservasComponent implements OnInit {
     this.apiService.obtenerReservas().subscribe({
       next: (data) => {
         this.reservas = data;
-        this.filtrarReservas();  // Aplicar filtro tras obtener las reservas
+        this.filtrarReservas();  
       },
       error: (error) => console.error('Error al obtener reservas:', error)
     });

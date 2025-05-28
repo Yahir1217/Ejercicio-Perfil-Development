@@ -60,12 +60,25 @@
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
             <div class="flex items-center space-x-2">
               <button
+                (click)="liberarReserva(reserva)"
+                [disabled]="reserva.activa !== 'en_uso'"
+                class="flex items-center justify-center gap-2 px-3 py-1 rounded-md shadow-md transition text-sm
+                      text-white 
+                      bg-blue-500 hover:bg-blue-600 
+                      disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed"
+              >
+                <i class="fas fa-unlock"></i>
+                <span class="hidden sm:inline">Liberar</span>
+              </button>
+          
+              <button
                 (click)="actualizarReserva(reserva)"
                 class="flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1 rounded-md shadow-md transition text-sm"
               >
                 <i class="fas fa-edit"></i>
                 <span class="hidden sm:inline">Editar</span>
               </button>
+          
               <button
                 (click)="eliminarReserva(reserva.id)"
                 class="flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md shadow-md transition text-sm"
@@ -75,6 +88,7 @@
               </button>
             </div>
           </td>
+          
         </tr>
       </tbody>
     </table>

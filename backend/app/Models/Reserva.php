@@ -39,19 +39,27 @@ class Reserva extends Model
         return sprintf('%02d:%02d', $diff->h, $diff->i);
     }
 
-    //codigo para automatizar el estado de las reservas
     public function getActivaAttribute($value)
     {
+        // Si ya fue liberada manualmente, respeta ese valor
+        if ($value === 'liberada') {
+            return 'liberada';
+        }
+    
         $now = Carbon::now('America/Mazatlan');
-
+    
         if ($now->lt($this->inicio)) {
-            return 'activa'; // Aún no inicia, pero está programada
+            return 'activa'; // Programada pero aún no inicia
         } elseif ($now->between($this->inicio, $this->fin)) {
-            return 'en_uso'; // Ya está en curso
+            if (is_null($this->sala_id)) {
+                return 'activa';
+            }
+            return 'en_uso';
         } else {
-            return 'liberada'; // Ya terminó
+            return 'liberada'; // Terminó automáticamente
         }
     }
+    
 
 
 }

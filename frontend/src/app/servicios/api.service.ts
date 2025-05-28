@@ -133,6 +133,13 @@ export class ApiService {
       headers: this.getAuthHeaders()
     });
   }
+  
+  liberarReserva(id: number) {
+    return this.http.put(`${this.apiUrl}/reservas/${id}/liberar`, {}, {
+      headers: this.getAuthHeaders()
+    });
+  }
+  
 
 
   
