@@ -13,24 +13,28 @@ class ReservaController extends Controller
 
     public function index()
     {
-        return Reserva::with(['user', 'sala'])->get()->map(function ($reserva) {
-            return [
-                'id' => $reserva->id,
-                'user_id' => $reserva->user_id,
-                'sala_id' => $reserva->sala_id,
-                'inicio' => $reserva->inicio,
-                'fin' => $reserva->fin,
-                'activa' => $reserva->activa,
-                'created_at' => $reserva->created_at,
-                'updated_at' => $reserva->updated_at,
-                'fecha' => $reserva->fecha,
-                'hora_inicio' => $reserva->hora_inicio,
-                'hora' => $reserva->duracion,
-                'user' => $reserva->user,
-                'sala' => $reserva->sala,
-            ];
-        });
+        return Reserva::with(['user', 'sala'])
+            ->whereNotNull('sala_id')
+            ->get()
+            ->map(function ($reserva) {
+                return [
+                    'id' => $reserva->id,
+                    'user_id' => $reserva->user_id,
+                    'sala_id' => $reserva->sala_id,
+                    'inicio' => $reserva->inicio,
+                    'fin' => $reserva->fin,
+                    'activa' => $reserva->activa,
+                    'created_at' => $reserva->created_at,
+                    'updated_at' => $reserva->updated_at,
+                    'fecha' => $reserva->fecha,
+                    'hora_inicio' => $reserva->hora_inicio,
+                    'hora' => $reserva->duracion,
+                    'user' => $reserva->user,
+                    'sala' => $reserva->sala,
+                ];
+            });
     }
+    
     
 
     public function store(Request $request)
@@ -105,4 +109,34 @@ class ReservaController extends Controller
 
         return response()->json(null, 204);
     }
+
+    public function reservasSinSala()
+{
+    $reservas = Reserva::with('user') // Asegúrate de tener la relación con 'user' en el modelo
+        ->whereNull('sala_id')
+        ->orderBy('inicio', 'desc')
+        ->get();
+
+    return response()->json($reservas, 200);
+}
+
+public function asignarSala(Request $request, $id)
+{
+    $reserva = Reserva::find($id);
+
+    if (!$reserva) {
+        return response()->json(['message' => 'Reserva no encontrada'], 404);
+    }
+
+    $validated = $request->validate([
+        'sala_id' => 'required|exists:salas,id',
+    ]);
+
+    $reserva->sala_id = $validated['sala_id'];
+    $reserva->save();
+
+    return response()->json(['message' => 'Sala asignada correctamente']);
+}
+
+
 }

@@ -109,4 +109,17 @@ export class ApiService {
       headers: this.getAuthHeaders()
     });
   }
+
+  getReservasSinSala(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/reservas/sin-sala`);
+  }
+
+  actualizarSalaEnReserva(reservaId: number, salaId: number): Observable<any> {
+    return this.http.put(`${this.apiUrl}/reservas/${reservaId}/asignar-sala`, 
+      { sala_id: salaId }, 
+      { headers: this.getAuthHeaders() }
+    );
+  }
+  
+  
 }

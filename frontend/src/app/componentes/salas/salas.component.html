@@ -100,8 +100,26 @@
             </span>
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-            <button (click)="editarSala(sala)" class="text-indigo-600 hover:text-indigo-900">Editar</button>
-            <button (click)="eliminarSala(sala.id)" class="ml-2 text-red-600 hover:text-red-900">Eliminar</button>
+            <div class="flex items-center space-x-2">
+              <!-- Botón Editar Sala -->
+              <button
+                (click)="editarSala(sala)"
+                class="flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1 rounded-md shadow-md transition"
+              >
+                <i class="fas fa-edit"></i>
+                <span class="hidden sm:inline">Editar</span>
+              </button>
+            
+              <!-- Botón Eliminar Sala -->
+              <button
+                (click)="eliminarSala(sala.id)"
+                class="flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md shadow-md transition"
+              >
+                <i class="fas fa-trash-alt"></i>
+                <span class="hidden sm:inline">Eliminar</span>
+              </button>
+            </div>
+            
           </td>
         </tr>
       </tbody>

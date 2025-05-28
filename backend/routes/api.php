@@ -24,6 +24,9 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/reservas', [ReservaController::class, 'store']); // Crear una nueva reserva
     Route::put('/reservas/{id}', [ReservaController::class, 'update']); // Editar una reserva
     Route::delete('/reservas/{reserva}', [ReservaController::class, 'destroy']); // ✅ Esta es la correcta
+    Route::put('/reservas/{id}/asignar-sala', [ReservaController::class, 'asignarSala']);
+    Route::get('/reservas/sin-sala', [ReservaController::class, 'reservasSinSala']);
+
 
     // Rutas para los usuarios
     Route::get('/usuarios', [UsuarioController::class, 'index']);  // Obtener todos los usuarios

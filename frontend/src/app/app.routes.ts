@@ -28,5 +28,10 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./componentes/usuarios/usuarios.component').then(m => m.UsuariosComponent),
   },
+  {
+    path: 'reservas_sin_salas',
+    loadComponent: () =>
+      import('./componentes/reservas-sin-sala/reservas-sin-sala.component').then(m => m.ReservasSinSalaComponent),
+  }, 
   
 ];

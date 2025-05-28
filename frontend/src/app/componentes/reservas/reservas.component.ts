@@ -109,18 +109,21 @@ export class ReservasComponent implements OnInit {
   }
 
   filtrarReservas() {
+    const filtro = this.filtroBusqueda.toLowerCase();
+    const estado = this.estadoFiltro.toLowerCase();
+  
     this.reservasFiltradas = this.reservas.filter(reserva => {
       const nombreSala = reserva.sala?.nombre?.toLowerCase() || '';
       const nombreUsuario = reserva.user?.name?.toLowerCase() || '';
-      const filtro = this.filtroBusqueda.toLowerCase();
-      const estado = this.estadoFiltro.toLowerCase();
-  
       const coincideSalaOUsuario = nombreSala.includes(filtro) || nombreUsuario.includes(filtro);
-      const coincideEstado = estado === '' || (reserva.activa ? 'activa' : 'inactiva').includes(estado);
+      
+      const estadoReserva = (reserva.activa || '').toLowerCase(); // puede ser 'activa', 'en_uso', 'liberada'
+      const coincideEstado = estado === '' || estadoReserva === estado;
   
       return coincideSalaOUsuario && coincideEstado;
     });
   }
+  
 
   cambiarStep(step: number) {
     const nextStep = this.currentStep + step;

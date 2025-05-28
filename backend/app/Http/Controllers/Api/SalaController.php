@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Sala;
+use App\Models\Reserva;
 use Illuminate\Http\Request;
 
 class SalaController extends Controller
@@ -33,29 +34,37 @@ class SalaController extends Controller
         return response()->json($sala, 201);
     }
 
-    // Editar una sala existente
     public function update(Request $request, $id)
     {
         $sala = Sala::find($id);
-
+    
         if (!$sala) {
             return response()->json(['message' => 'Sala no encontrada'], 404);
         }
-
+    
         $request->validate([
             'nombre' => 'required|string|max:255',
             'capacidad' => 'required|integer|min:1',
             'disponible' => 'required|boolean'
         ]);
-
+    
+        // Actualiza la sala
         $sala->update([
             'nombre' => $request->nombre,
             'capacidad' => $request->capacidad,
             'disponible' => $request->disponible
         ]);
-
+    
+        if ($request->disponible == 0) {
+            Reserva::where('sala_id', $sala->id)
+                ->where('inicio', '>', now())
+                ->update(['sala_id' => null]);
+        }
+        
+    
         return response()->json($sala, 200);
     }
+    
 
     // Eliminar una sala
     public function destroy($id)
