@@ -17,10 +17,11 @@ return new class extends Migration
             $table->foreignId('sala_id')->constrained('salas')->onDelete('cascade');
             $table->dateTime('inicio');
             $table->dateTime('fin');            
-            $table->boolean('activa')->default(true); // Para saber si se liberó
+            $table->enum('activa', ['activa', 'en_uso', 'liberada'])->default('activa');
             $table->timestamps();
         });
     }
+    
     
     /**
      * Reverse the migrations.

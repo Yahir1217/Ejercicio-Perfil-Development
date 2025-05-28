@@ -1,12 +1,19 @@
 <div class="container mx-auto px-4 mt-10">
   <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
     <div class="flex items-center gap-2 w-full md:w-auto">
+      <!-- Input de búsqueda -->
       <input
         type="text"
         placeholder="Buscar sala..."
+        [(ngModel)]="filtroBusqueda"
+        (input)="filtrarSalas()"
         class="border border-gray-300 rounded px-3 py-2 w-full md:w-64 focus:outline-none focus:ring-2 focus:ring-emerald-400"
       />
+      
+      <!-- Filtro de disponibilidad -->
       <select
+        [(ngModel)]="filtroDisponibilidad"
+        (change)="filtrarSalas()"
         class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-400"
       >
         <option value="">Todas</option>
@@ -23,8 +30,9 @@
     *ngIf="mostrarModal"
   >
     <div class="bg-white rounded-lg p-6 w-full max-w-md shadow-lg">
-      <h2 class="text-lg font-semibold mb-4">Nueva Sala</h2>
-      <form (ngSubmit)="guardarSala()">
+      <h2 class="text-lg font-semibold mb-4">
+        {{ editando ? 'Editar Sala' : 'Nueva Sala' }}
+      </h2>      <form (ngSubmit)="guardarSala()">
         <div class="mb-4">
           <label class="block text-sm font-medium mb-1">Nombre:</label>
           <input
@@ -77,7 +85,7 @@
         </tr>
       </thead>
       <tbody class="bg-white divide-y divide-gray-200">
-        <tr *ngFor="let sala of salas">
+        <tr *ngFor="let sala of salasFiltradas">
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ sala.nombre }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ sala.capacidad }}</td>
           <td class="px-6 py-4 whitespace-nowrap">
@@ -92,12 +100,11 @@
             </span>
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-            <a href="#" class="text-indigo-600 hover:text-indigo-900">Editar</a>
-            <a href="#" class="ml-2 text-red-600 hover:text-red-900">Eliminar</a>
+            <button (click)="editarSala(sala)" class="text-indigo-600 hover:text-indigo-900">Editar</button>
+            <button (click)="eliminarSala(sala.id)" class="ml-2 text-red-600 hover:text-red-900">Eliminar</button>
           </td>
         </tr>
       </tbody>
-      
     </table>
   </div>
 </div>

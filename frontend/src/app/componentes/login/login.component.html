@@ -1,9 +1,68 @@
-<div class="flex items-center justify-center min-h-screen bg-gray-100">
-    <form (ngSubmit)="login()" class="bg-white p-6 rounded shadow-md w-80">
-      <h2 class="text-xl font-bold mb-4 text-center">Iniciar sesión</h2>
-      <input type="text" [(ngModel)]="email" name="email" placeholder="Correo" class="w-full p-2 border rounded mb-4" required>
-      <input type="password" [(ngModel)]="password" name="password" placeholder="Contraseña" class="w-full p-2 border rounded mb-4" required>
-      <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">Entrar</button>
-    </form>
+<div class="relative min-h-screen flex items-center justify-center bg-white overflow-hidden font-[Poppins,sans-serif]">
+  <!-- Fondo -->
+  <img class="wave fixed bottom-0 left-0 h-full z-[-1]" src="../../../assets/img/login/bg.svg" alt="Fondo Login">
+
+  <!-- Contenedor principal -->
+  <div class="container grid grid-cols-1 md:grid-cols-2 gap-8 items-center px-8 w-full h-full">
+    
+    <!-- Imagen lateral -->
+    <div class="img hidden md:block">
+      <img src="assets/img/login/image.png" alt="Imagen Login">
+    </div>
+
+    <!-- Formulario -->
+    <div class="login-content flex flex-col justify-center items-center text-center w-full max-w-md">
+      <!-- Avatar -->
+      <img src="../../../assets/img/login/avatar.png" alt="Avatar" class="h-[100px] mb-4">
+      <h2 class="title text-2xl font-bold mb-4">Bienvenido</h2>
+
+      <!-- Formulario con ngModel -->
+      <form (ngSubmit)="login()" class="w-[360px] mt-4">
+
+        <!-- Correo -->
+        <div class="input-div one relative grid grid-cols-[7%_93%] items-center border-b-2 border-gray-300 py-2 mb-6 focus-within:border-green-500">
+          <div class="i flex justify-center items-center text-gray-400">
+            <i class="fas fa-envelope"></i>
+          </div>
+          <div class="relative w-full">
+            <input
+              type="text"
+              id="email"
+              name="email"
+              [(ngModel)]="email"
+              required
+              class="input w-full border-none outline-none bg-transparent py-2 text-lg text-gray-700"
+              placeholder="Correo"
+            >
+          </div>
+        </div>
+
+        <!-- Contraseña -->
+        <div class="input-div pass relative grid grid-cols-[7%_93%] items-center border-b-2 border-gray-300 py-2 mb-6 focus-within:border-green-500">
+          <div class="i flex justify-center items-center text-gray-400">
+            <i class="fas fa-lock"></i>
+          </div>
+          <div class="relative w-full">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              [(ngModel)]="password"
+              required
+              class="input w-full border-none outline-none bg-transparent py-2 text-lg text-gray-700"
+              placeholder="Contraseña"
+            >
+          </div>
+        </div>
+
+        <!-- Botón login -->
+        <button
+          type="submit"
+          class="btn w-full h-12 rounded-3xl text-white text-lg uppercase bg-gradient-to-r from-green-500 to-green-400 bg-[length:200%] transition-all duration-500 hover:bg-right mt-4"
+        >
+          Iniciar Sesión
+        </button>
+      </form>
+    </div>
   </div>
-  
+</div>

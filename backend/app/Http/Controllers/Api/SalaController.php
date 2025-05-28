@@ -8,45 +8,66 @@ use Illuminate\Http\Request;
 
 class SalaController extends Controller
 {
+    // Obtener todas las salas
     public function index()
-    { 
-        return Sala::all();
+    {
+        $salas = Sala::all();
+        return response()->json($salas);
     }
 
+    // Crear una nueva sala
     public function store(Request $request)
     {
         $request->validate([
             'nombre' => 'required|string|max:255',
-            'descripcion' => 'nullable|string',
+            'capacidad' => 'required|integer|min:1',
+            'disponible' => 'required|boolean'
         ]);
 
-        $sala = Sala::create($request->all());
+        $sala = Sala::create([
+            'nombre' => $request->nombre,
+            'capacidad' => $request->capacidad,
+            'disponible' => $request->disponible
+        ]);
 
         return response()->json($sala, 201);
     }
 
-    public function show(Sala $sala)
+    // Editar una sala existente
+    public function update(Request $request, $id)
     {
-        return $sala;
-    }
+        $sala = Sala::find($id);
 
-    public function update(Request $request, Sala $sala)
-    {
+        if (!$sala) {
+            return response()->json(['message' => 'Sala no encontrada'], 404);
+        }
+
         $request->validate([
             'nombre' => 'required|string|max:255',
-            'descripcion' => 'nullable|string',
+            'capacidad' => 'required|integer|min:1',
+            'disponible' => 'required|boolean'
         ]);
 
-        $sala->update($request->all());
+        $sala->update([
+            'nombre' => $request->nombre,
+            'capacidad' => $request->capacidad,
+            'disponible' => $request->disponible
+        ]);
 
         return response()->json($sala, 200);
     }
 
-    public function destroy(Sala $sala)
+    // Eliminar una sala
+    public function destroy($id)
     {
+        $sala = Sala::find($id);
+
+        if (!$sala) {
+            return response()->json(['message' => 'Sala no encontrada'], 404);
+        }
+
         $sala->delete();
 
-        return response()->json(null, 204);
+        return response()->json(['message' => 'Sala eliminada con éxito'], 200);
     }
 }
-
