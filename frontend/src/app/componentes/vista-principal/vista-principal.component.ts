@@ -3,6 +3,8 @@ import * as echarts from 'echarts';
 import { ApiService } from '../../servicios/api.service';
 import { Reserva } from '../../interface/reserva';
 import { Sala } from '../../interface/sala';
+import * as XLSX from 'xlsx';
+import * as FileSaver from 'file-saver';
 
 
 @Component({
@@ -48,10 +50,8 @@ export class VistaPrincipalComponent implements AfterViewInit, OnInit {
     this.apiService.obtenerReservas2().subscribe({
       next: (data) => {
         this.reservas = data;
-        console.log('Reservas recibidas:', this.reservas);
-        // Aquí luego podrás pasar datos a las gráficas
-        this.initLineChart(); // Llamar aquí después de que ya tenemos los datos
-        this.initBarChart(); // solo aquí debe llamarse
+        this.initLineChart(); 
+        this.initBarChart(); 
         this.initPieChart();
       },
       error: (error) => {
@@ -61,9 +61,15 @@ export class VistaPrincipalComponent implements AfterViewInit, OnInit {
   }
 
   private initLineChart(): void {
-    const chartDom = document.getElementById('chart-line');
+    const chartDom = document.getElementById('chart-line'); 
     if (!chartDom) return;
-  
+    
+    // ✅ Destruir instancia previa si existe
+    const instanciaExistente = echarts.getInstanceByDom(chartDom);
+    if (instanciaExistente) {
+      echarts.dispose(chartDom);
+    }
+    
     const myChart = echarts.init(chartDom);
     const dias = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   
@@ -119,8 +125,15 @@ export class VistaPrincipalComponent implements AfterViewInit, OnInit {
   
   
   private initPieChart(): void {
-    const chartDom = document.getElementById('chart-pie');
+    const chartDom = document.getElementById('chart-pie'); 
     if (!chartDom) return;
+    
+    // ✅ Destruir instancia previa si existe
+    const instanciaExistente = echarts.getInstanceByDom(chartDom);
+    if (instanciaExistente) {
+      echarts.dispose(chartDom);
+    }
+    
     const myChart = echarts.init(chartDom);
   
     const conteoSalas: { [nombre: string]: number } = {};
@@ -138,9 +151,7 @@ export class VistaPrincipalComponent implements AfterViewInit, OnInit {
       name: nombre,
       value: cantidad
     }));
-  
-    console.log('Datos para pie chart:', dataSeries);
-  
+    
     const option = {
       tooltip: { trigger: 'item' },
       legend: { top: '5%', left: 'center' },
@@ -169,10 +180,17 @@ export class VistaPrincipalComponent implements AfterViewInit, OnInit {
   
   
   private initBarChart(): void {
-    const chartDom = document.getElementById('chart-bar');
+    const chartDom = document.getElementById('chart-bar'); 
     if (!chartDom) return;
-  
+    
+    // ✅ Destruir instancia previa si existe
+    const instanciaExistente = echarts.getInstanceByDom(chartDom);
+    if (instanciaExistente) {
+      echarts.dispose(chartDom);
+    }
+    
     const myChart = echarts.init(chartDom);
+    
   
     const hoy = new Date();
     const mesActual = hoy.getMonth(); // 0-11
@@ -211,7 +229,6 @@ export class VistaPrincipalComponent implements AfterViewInit, OnInit {
     const nombres = topUsuarios.map(([nombre]) => nombre);
     const cantidades = topUsuarios.map(([_, cantidad]) => cantidad);
   
-    console.log('Usuarios con más reservas:', nombres, cantidades);
   
     const option = {
       tooltip: {
@@ -239,5 +256,33 @@ export class VistaPrincipalComponent implements AfterViewInit, OnInit {
   
     myChart.setOption(option);
   }
+
+  generarExcel(): void {
+    const reservasExport = this.reservas.map(res => {
+      const reserva: any = res; // ⚠️ Hacemos cast a any
+  
+      return {
+        ID: reserva['id'],
+        Sala: reserva['sala']?.['nombre'],
+        Usuario: reserva['usuario']?.['nombre'],
+        Inicio: reserva['inicio'],
+        Fin: reserva['fin'],
+        Duración: reserva['duracion'],
+        'Fecha de Creación': reserva['created_at'],
+        'Última Actualización': reserva['updated_at']
+      };
+    });
+  
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(reservasExport);
+    const workbook: XLSX.WorkBook = {
+      Sheets: { 'Reservas': worksheet },
+      SheetNames: ['Reservas']
+    };
+  
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const data: Blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    FileSaver.saveAs(data, 'reservas.xlsx');
+  }
+  
   
 }
