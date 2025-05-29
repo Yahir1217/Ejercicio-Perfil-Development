@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { ApiService } from '../../servicios/api.service';
-import { Sala } from '../../interface/sala'; // Asegúrate que la ruta sea correcta
+import { Sala } from '../../interface/sala'; 
 
 @Component({ 
   selector: 'app-salas',
@@ -26,7 +26,6 @@ export class SalasComponent implements OnInit {
     disponible: 1
   };
 
-  // Variables para búsqueda y filtro
   filtroBusqueda: string = '';
   filtroDisponibilidad: string = '';
 

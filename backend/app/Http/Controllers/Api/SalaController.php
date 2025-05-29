@@ -9,14 +9,23 @@ use Illuminate\Http\Request;
 
 class SalaController extends Controller
 {
-    // Obtener todas las salas
+    /**
+     * Obtiene la lista de todas las salas registradas.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index()
     {
         $salas = Sala::all();
         return response()->json($salas);
     }
 
-    // Crear una nueva sala
+    /**
+     * Crea una nueva sala con los datos proporcionados.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(Request $request)
     {
         $request->validate([
@@ -34,6 +43,16 @@ class SalaController extends Controller
         return response()->json($sala, 201);
     }
 
+    /**
+     * Actualiza una sala existente con nuevos datos.
+     *
+     * Si se marca como no disponible (`disponible` = 0),
+     * se eliminan las reservas futuras asociadas a esa sala (se les asigna `sala_id = null`).
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function update(Request $request, $id)
     {
         $sala = Sala::find($id);
@@ -48,25 +67,28 @@ class SalaController extends Controller
             'disponible' => 'required|boolean'
         ]);
     
-        // Actualiza la sala
         $sala->update([
             'nombre' => $request->nombre,
             'capacidad' => $request->capacidad,
             'disponible' => $request->disponible
         ]);
     
+        // Si la sala se marca como no disponible, se liberan sus reservas futuras
         if ($request->disponible == 0) {
             Reserva::where('sala_id', $sala->id)
                 ->where('inicio', '>', now())
                 ->update(['sala_id' => null]);
         }
         
-    
         return response()->json($sala, 200);
     }
-    
 
-    // Eliminar una sala
+    /**
+     * Elimina una sala del sistema por su ID.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function destroy($id)
     {
         $sala = Sala::find($id);

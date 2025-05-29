@@ -5,14 +5,14 @@ export interface Reserva {
   id: number;
   sala_id?: number;
   user_id?: number;
-  sala?: Sala;           // <- ahora es un objeto, no string
-  user?: Usuario;        // <- ahora es un objeto, no string
+  sala?: Sala;           
+  user?: Usuario;        
   fecha?: string;
   hora?: string;
-  estado: number; // 1 para activa, 0 para finalizada
+  estado: number; 
   fin?: string;
-  activa: string; // <- explícitamente number
-  hora_inicio?: string; // <-- Agrega esta línea
+  activa: string; 
+  hora_inicio?: string; 
 
 }
 

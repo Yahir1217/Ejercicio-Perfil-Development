@@ -64,22 +64,20 @@ export class VistaPrincipalComponent implements AfterViewInit, OnInit {
     const chartDom = document.getElementById('chart-line'); 
     if (!chartDom) return;
     
-    // ✅ Destruir instancia previa si existe
     const instanciaExistente = echarts.getInstanceByDom(chartDom);
     if (instanciaExistente) {
       echarts.dispose(chartDom);
     }
     
     const myChart = echarts.init(chartDom);
-    const dias = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const dias = ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'];
   
     const hoy = new Date();
     const startOfWeek = new Date(hoy);
-    startOfWeek.setDate(hoy.getDate() - hoy.getDay()); // Domingo
+    startOfWeek.setDate(hoy.getDate() - hoy.getDay()); 
     const endOfWeek = new Date(startOfWeek);
-    endOfWeek.setDate(startOfWeek.getDate() + 6); // Sábado
+    endOfWeek.setDate(startOfWeek.getDate() + 6); 
   
-    // Mapa para contar reservas por sala y por día
     const conteoPorSala: { [salaNombre: string]: number[] } = {};
   
     this.reservas.forEach((reserva: any) => {
@@ -89,14 +87,14 @@ export class VistaPrincipalComponent implements AfterViewInit, OnInit {
       if (!sala || fecha < startOfWeek || fecha > endOfWeek) return;
   
       if (!conteoPorSala[sala]) {
-        conteoPorSala[sala] = [0, 0, 0, 0, 0, 0, 0]; // Domingo a sábado
+        conteoPorSala[sala] = [0, 0, 0, 0, 0, 0, 0]; 
       }
   
-      const dia = fecha.getDay(); // 0 (domingo) a 6 (sábado)
+      const dia = fecha.getDay(); 
       conteoPorSala[sala][dia]++;
     });
   
-    // Convertir el conteo en series para ECharts
+    
     const series = Object.keys(conteoPorSala).map((salaNombre) => ({
       name: salaNombre,
       type: 'line',
@@ -128,7 +126,6 @@ export class VistaPrincipalComponent implements AfterViewInit, OnInit {
     const chartDom = document.getElementById('chart-pie'); 
     if (!chartDom) return;
     
-    // ✅ Destruir instancia previa si existe
     const instanciaExistente = echarts.getInstanceByDom(chartDom);
     if (instanciaExistente) {
       echarts.dispose(chartDom);
@@ -183,7 +180,6 @@ export class VistaPrincipalComponent implements AfterViewInit, OnInit {
     const chartDom = document.getElementById('chart-bar'); 
     if (!chartDom) return;
     
-    // ✅ Destruir instancia previa si existe
     const instanciaExistente = echarts.getInstanceByDom(chartDom);
     if (instanciaExistente) {
       echarts.dispose(chartDom);
@@ -193,7 +189,7 @@ export class VistaPrincipalComponent implements AfterViewInit, OnInit {
     
   
     const hoy = new Date();
-    const mesActual = hoy.getMonth(); // 0-11
+    const mesActual = hoy.getMonth(); 
     const añoActual = hoy.getFullYear();
   
     const conteoUsuarios: { [nombre: string]: number } = {};
@@ -201,7 +197,6 @@ export class VistaPrincipalComponent implements AfterViewInit, OnInit {
     this.reservas.forEach((reserva: any) => {
       if (!reserva.inicio || !reserva.user?.name) return;
   
-      // Forzar formato correcto sin depender del navegador
       const fechaParts = reserva.inicio.split(/[- :]/);
       const fecha = new Date(
         parseInt(fechaParts[0]),
@@ -259,7 +254,7 @@ export class VistaPrincipalComponent implements AfterViewInit, OnInit {
 
   generarExcel(): void {
     const reservasExport = this.reservas.map(res => {
-      const reserva: any = res; // ⚠️ Hacemos cast a any
+      const reserva: any = res; 
   
       return {
         ID: reserva['id'],

@@ -18,11 +18,21 @@ export class LoginComponent {
 
   constructor(private auth: AuthService, private router: Router) {}
 
+  ngOnInit(): void {
+    // Evita error si no estás en navegador (por ejemplo, durante SSR)
+    if (typeof window !== 'undefined') {
+      const token = sessionStorage.getItem('token');
+      if (token) {
+        this.router.navigate(['/inicio']);
+      }
+    }
+  }
+  
   login() {
     this.auth.login(this.email, this.password).subscribe({
       next: (res) => {
         sessionStorage.setItem('token', res.token);
-        sessionStorage.setItem('user_id', res.user_id); // 👈 SIN encriptar
+        sessionStorage.setItem('user_id', res.user_id); 
 
         Swal.fire({
           icon: 'success',

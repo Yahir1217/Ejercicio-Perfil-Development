@@ -27,7 +27,7 @@ export class ReservasSinSalaComponent implements OnInit {
     user_id: 0,
     fecha: '',
     hora: '',
-    hora_inicio: '',  // <-- usa esta
+    hora_inicio: '', 
     fin: ''
   };
   salas: Sala[] = [];
@@ -109,9 +109,9 @@ export class ReservasSinSalaComponent implements OnInit {
             icon: 'success',
             title: 'Sala asignada',
             text: 'La sala fue asignada correctamente a la reserva.',
-            confirmButtonColor: '#10B981' // emerald-500
+            confirmButtonColor: '#10B981' 
           });
-          this.cargarReservasSinSala(); // Actualiza la lista
+          this.cargarReservasSinSala(); 
           this.cerrarModalAsignar();
         },
         (error) => {
@@ -120,7 +120,7 @@ export class ReservasSinSalaComponent implements OnInit {
             icon: 'error',
             title: 'Error',
             text: 'Ocurrió un error al asignar la sala.',
-            confirmButtonColor: '#EF4444' // red-500
+            confirmButtonColor: '#EF4444' 
           });
         }
       );
@@ -139,7 +139,6 @@ export class ReservasSinSalaComponent implements OnInit {
     this.modalAsignarAbierto = true;
     this.currentStep = 1;
   
-    // ✅ Cargar salas desde el backend
     this.cargarSalas();
   }
   
@@ -148,7 +147,7 @@ export class ReservasSinSalaComponent implements OnInit {
   eliminarReserva(id: number) {
     if (confirm('¿Estás seguro de eliminar esta reserva?')) {
       this.apiService.eliminarReserva(id).subscribe(() => {
-        this.cargarReservasSinSala(); // Recarga la lista después de eliminar
+        this.cargarReservasSinSala(); 
       });
     } 
   }

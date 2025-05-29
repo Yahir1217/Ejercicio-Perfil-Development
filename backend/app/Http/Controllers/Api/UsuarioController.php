@@ -9,17 +9,25 @@ use Illuminate\Support\Facades\Validator;
 
 class UsuarioController extends Controller
 {
-    // Obtener todos los usuarios
+    /**
+     * Obtiene todos los usuarios del sistema.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index()
     {
-        $usuarios = User::all(); // Trae todos los usuarios
+        $usuarios = User::all(); 
         return response()->json($usuarios);
     }
 
-    // Crear un nuevo usuario
+    /**
+     * Crea un nuevo usuario.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(Request $request)
     {
-        // Validar los datos de entrada
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
@@ -29,7 +37,6 @@ class UsuarioController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        // Crear un nuevo usuario
         $usuario = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -38,7 +45,13 @@ class UsuarioController extends Controller
         return response()->json($usuario, 201);
     }
 
-    // Actualizar un usuario existente
+    /**
+     * Actualiza la información de un usuario existente.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function update(Request $request, $id)
     {
         $usuario = User::find($id);
@@ -47,7 +60,6 @@ class UsuarioController extends Controller
             return response()->json(['error' => 'Usuario no encontrado'], 404);
         }
 
-        // Validar los datos de entrada
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $id,
@@ -57,11 +69,9 @@ class UsuarioController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        // Actualizar el usuario
         $usuario->name = $request->name;
         $usuario->email = $request->email;
 
-        // Si se pasa un password, lo actualiza
         if ($request->filled('password')) {
             $usuario->password = bcrypt($request->password);
         }
@@ -71,7 +81,12 @@ class UsuarioController extends Controller
         return response()->json($usuario);
     }
 
-    // Eliminar un usuario
+    /**
+     * Elimina un usuario por ID.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function destroy($id)
     {
         $usuario = User::find($id);
@@ -85,6 +100,12 @@ class UsuarioController extends Controller
         return response()->json(['message' => 'Usuario eliminado con éxito']);
     }
 
+    /**
+     * Obtiene el nombre y correo electrónico de un usuario específico.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function obtenerUsuario($id)
     {
         $usuario = User::find($id);
@@ -98,5 +119,4 @@ class UsuarioController extends Controller
             'email' => $usuario->email
         ]);
     }
-
 }

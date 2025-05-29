@@ -24,7 +24,6 @@ export class UsuariosComponent implements OnInit {
     email: '',
   };
 
-  // Indicador para saber si es un nuevo usuario o uno a editar
   esEdicion: boolean = false;
 
   constructor(private apiService: ApiService) {}
@@ -61,13 +60,11 @@ export class UsuariosComponent implements OnInit {
 
   abrirModal(usuario?: Usuario) {
     if (usuario) {
-      // Si el usuario existe, estamos en modo edición
       this.esEdicion = true;
-      this.nuevaUsuario = { ...usuario }; // Copiar los datos del usuario al formulario
+      this.nuevaUsuario = { ...usuario }; 
     } else {
-      // Si no hay usuario, estamos en modo de creación
       this.esEdicion = false;
-      this.nuevaUsuario = { id: undefined, name: '', email: '' }; // Limpiar el formulario
+      this.nuevaUsuario = { id: undefined, name: '', email: '' }; 
     }
     this.modalAbierto = true;
   }
@@ -79,7 +76,6 @@ export class UsuariosComponent implements OnInit {
 
   guardarUsuario() {
     if (this.esEdicion) {
-      // Si estamos en modo edición, actualizar el usuario
       this.apiService.actualizarUsuario(this.nuevaUsuario).subscribe({
         next: () => {
           Swal.fire('Éxito', 'Usuario actualizado correctamente', 'success');
@@ -92,7 +88,6 @@ export class UsuariosComponent implements OnInit {
         }
       });
     } else {
-      // Si estamos en modo agregar, crear el nuevo usuario
       this.apiService.agregarUsuario(this.nuevaUsuario).subscribe({
         next: () => {
           Swal.fire('Éxito', 'Usuario agregado correctamente', 'success');
@@ -108,7 +103,7 @@ export class UsuariosComponent implements OnInit {
   }
 
   editarUsuario(usuario: Usuario) {
-    this.abrirModal(usuario); // Abre el modal en modo edición
+    this.abrirModal(usuario); 
   }
 
   eliminarUsuario(id: number) {
