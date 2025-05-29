@@ -44,7 +44,7 @@ export class ApiService {
   crearSala(sala: Partial<Sala>): Observable<Sala> {
     return this.http.post<Sala>(`${this.apiUrl}/salas`, sala, {
       headers: this.getAuthHeaders()
-    });
+    }); 
   }
 
   actualizarSala(id: number, sala: Partial<Sala>): Observable<Sala> {

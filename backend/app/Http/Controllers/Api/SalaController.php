@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Sala;
 use App\Models\Reserva;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class SalaController extends Controller
 {
@@ -73,13 +75,20 @@ class SalaController extends Controller
             'disponible' => $request->disponible
         ]);
     
-        // Si la sala se marca como no disponible, se liberan sus reservas futuras
-        if ($request->disponible == 0) {
-            Reserva::where('sala_id', $sala->id)
+        // Si la sala se marca como no disponible, liberar sus reservas futuras
+        if ((int) $request->input('disponible') == 0) {
+            logger("Entrando al if: la sala se marcó como no disponible");
+        
+            $afectadas = Reserva::where('sala_id', $sala->id)
                 ->where('inicio', '>', now())
                 ->update(['sala_id' => null]);
+        
+            logger("Reservas afectadas: $afectadas");
         }
         
+        
+        
+    
         return response()->json($sala, 200);
     }
 

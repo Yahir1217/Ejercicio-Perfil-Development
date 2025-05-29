@@ -98,7 +98,7 @@ export class SalasComponent implements OnInit {
     if (this.editando && this.nuevaSala.id !== undefined) {
       // Actualiza sala existente
       this.apiService.actualizarSala(this.nuevaSala.id, this.nuevaSala).subscribe({
-        next: () => {
+        next: () => { 
           Swal.fire('Éxito', 'Sala actualizada correctamente', 'success');
           this.cerrarModal();
           this.obtenerSalas(); // Refresca la lista

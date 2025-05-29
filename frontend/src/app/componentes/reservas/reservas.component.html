@@ -15,7 +15,7 @@
     >
       <option value="">Todas</option>
       <option value="activa">Activas</option>
-      <option value="en_uso">En uso</option>
+      <option value="en_uso">En uso</option> 
       <option value="liberada">Liberadas</option>
     </select>
     
@@ -72,12 +72,18 @@
               </button>
           
               <button
-                (click)="actualizarReserva(reserva)"
-                class="flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1 rounded-md shadow-md transition text-sm"
-              >
-                <i class="fas fa-edit"></i>
-                <span class="hidden sm:inline">Editar</span>
-              </button>
+              (click)="actualizarReserva(reserva)"
+              [disabled]="reserva.activa !== 'activa'"
+              class="flex items-center justify-center gap-2 px-3 py-1 rounded-md shadow-md transition text-sm
+                     text-white 
+                     bg-emerald-500 hover:bg-emerald-600 
+                     disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed"
+            >
+              <i class="fas fa-edit"></i>
+              <span class="hidden sm:inline">Editar</span>
+            </button>
+            
+            
           
               <button
                 (click)="eliminarReserva(reserva.id)"

@@ -31,7 +31,7 @@ Route::middleware('auth:api')->group(function () {
     // Obtener el listado completo de salas
     Route::get('/salas', [SalaController::class, 'index']);
 
-    // Crear una nueva sala
+    // Crear una nueva sala 
     Route::post('/salas', [SalaController::class, 'store']);
 
     // Actualizar una sala existente por ID

@@ -33,7 +33,6 @@
 
         <!-- Opciones del menú de usuario -->
         <ul class="py-2">
-          <li><a routerLink="/perfil" class="block px-4 py-2 hover:bg-green-100 text-gray-700">Perfil</a></li>
           <li><a [routerLink]="'/salas'" class="block px-4 py-2 hover:bg-green-100 text-gray-700">Salas</a></li>
           <li><a [routerLink]="'/reservas'" class="block px-4 py-2 hover:bg-green-100 text-gray-700">Reservas</a></li>
           <li><a (click)="logout()" class="block px-4 py-2 hover:bg-green-100 text-gray-700 cursor-pointer">Cerrar sesión</a></li>
@@ -69,8 +68,6 @@
         <li><a routerLink="/reservas_sin_salas" routerLinkActive="text-green-700"
           class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-green-100 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0">Reservas sin salas</a></li>
 
-        <li><a routerLink="/about" routerLinkActive="text-green-700"
-          class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-green-100 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0">Acerca</a></li>
       </ul>
     </div>
   </div>
