@@ -1,29 +1,38 @@
+<!-- Contenedor principal de la página de login -->
 <div class="relative min-h-screen flex items-center justify-center bg-white overflow-hidden font-[Poppins,sans-serif]">
-  <!-- Fondo -->
+  
+  <!-- Imagen de fondo decorativa (estilo onda) -->
   <img class="wave fixed bottom-0 left-0 h-full z-[-1]" src="../../../assets/img/login/bg.svg" alt="Fondo Login">
 
-  <!-- Contenedor principal -->
+  <!-- Grid de dos columnas: imagen + formulario -->
   <div class="container grid grid-cols-1 md:grid-cols-2 gap-8 items-center px-8 w-full h-full">
-    
-    <!-- Imagen lateral -->
+
+    <!-- Columna izquierda: imagen ilustrativa visible solo en pantallas medianas o mayores -->
     <div class="img hidden md:block">
       <img src="assets/img/login/image.png" alt="Imagen Login">
     </div>
 
-    <!-- Formulario -->
+    <!-- Columna derecha: formulario de login -->
     <div class="login-content flex flex-col justify-center items-center text-center w-full max-w-md">
-      <!-- Avatar -->
+      
+      <!-- Avatar de usuario sobre el formulario -->
       <img src="../../../assets/img/login/avatar.png" alt="Avatar" class="h-[100px] mb-4">
+
+      <!-- Título de bienvenida -->
       <h2 class="title text-2xl font-bold mb-4">Bienvenido</h2>
 
-      <!-- Formulario con ngModel -->
+      <!-- Formulario de login (con [(ngModel)] para enlace bidireccional) -->
       <form (ngSubmit)="login()" class="w-[360px] mt-4">
 
-        <!-- Correo -->
+        <!-- Campo de entrada para el correo -->
         <div class="input-div one relative grid grid-cols-[7%_93%] items-center border-b-2 border-gray-300 py-2 mb-6 focus-within:border-green-500">
+          
+          <!-- Icono de sobre -->
           <div class="i flex justify-center items-center text-gray-400">
             <i class="fas fa-envelope"></i>
           </div>
+
+          <!-- Input para el email -->
           <div class="relative w-full">
             <input
               type="text"
@@ -37,11 +46,15 @@
           </div>
         </div>
 
-        <!-- Contraseña -->
+        <!-- Campo de entrada para la contraseña -->
         <div class="input-div pass relative grid grid-cols-[7%_93%] items-center border-b-2 border-gray-300 py-2 mb-6 focus-within:border-green-500">
+
+          <!-- Icono de candado -->
           <div class="i flex justify-center items-center text-gray-400">
             <i class="fas fa-lock"></i>
           </div>
+
+          <!-- Input para la contraseña -->
           <div class="relative w-full">
             <input
               type="password"
@@ -55,7 +68,7 @@
           </div>
         </div>
 
-        <!-- Botón login -->
+        <!-- Botón para enviar el formulario -->
         <button
           type="submit"
           class="btn w-full h-12 rounded-3xl text-white text-lg uppercase bg-gradient-to-r from-green-500 to-green-400 bg-[length:200%] transition-all duration-500 hover:bg-right mt-4"

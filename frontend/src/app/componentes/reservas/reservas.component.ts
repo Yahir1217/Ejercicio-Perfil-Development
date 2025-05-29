@@ -152,7 +152,6 @@ export class ReservasComponent implements OnInit {
     });
   }
   
-
   cambiarStep(step: number) {
     const nextStep = this.currentStep + step;
     if (nextStep >= 1 && nextStep <= 3) {
@@ -285,7 +284,6 @@ export class ReservasComponent implements OnInit {
     return true;
   }
   
-
   formatearFechaConZona(date: Date, timeZone: string = 'America/Mazatlan'): string {
     const formatter = new Intl.DateTimeFormat('en-CA', {
       timeZone,
@@ -377,8 +375,6 @@ export class ReservasComponent implements OnInit {
     }
   }
   
-  
-
   cerrarModal() {
     this.modalAbierto = false;
     this.currentStep = 1;
@@ -435,7 +431,6 @@ export class ReservasComponent implements OnInit {
     });
   }
   
-
   obtenerReservas() {
     this.apiService.obtenerReservas().subscribe({
       next: (data) => {

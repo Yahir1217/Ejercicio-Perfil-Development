@@ -1,18 +1,26 @@
+<!-- Contenedor para el botón de exportar a Excel -->
 <div class="flex justify-end items-center px-4 mt-6">
   <button 
-  (click)="generarExcel()"
-  class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+    (click)="generarExcel()"
+    class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
     Descargar Excel
   </button>
 </div>
 
+<!-- Contenedor principal para los gráficos -->
 <div class="container mx-auto px-4 mt-10"> 
+
+  <!-- Fila con gráficos de líneas y barras uno al lado del otro -->
   <div style="display: flex; gap: 2rem; justify-content: center;">
+    <!-- Contenedor para el gráfico de línea -->
     <div id="chart-line" style="width: 45%; height: 400px;"></div>
+    
+    <!-- Contenedor para el gráfico de barras -->
     <div id="chart-bar" style="width: 45%; height: 400px;"></div>
   </div> 
+
+  <!-- Gráfico circular debajo de los otros dos, centrado -->
   <div style="margin-top: 2rem; display: flex; justify-content: center;">
     <div id="chart-pie" style="width: 50%; height: 400px;"></div>
   </div>
 </div>
-

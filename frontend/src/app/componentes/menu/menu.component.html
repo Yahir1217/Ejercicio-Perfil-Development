@@ -1,19 +1,37 @@
+<!-- Barra de navegación principal -->
 <nav class="bg-[#A8E6CF] border-b border-gray-200 px-4 py-2.5">
   <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
+    
+    <!-- Marca o logotipo -->
     <a href="#" class="flex items-center">
       <span class="self-center text-xl font-semibold whitespace-nowrap text-gray-800">ReservaFácil</span>
     </a>
+
+    <!-- Sección derecha de la barra (avatar, menú desplegable, botón móvil) -->
     <div class="flex items-center md:order-2 relative">
-      <button (click)="dropdownOpen = !dropdownOpen" type="button" class="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300" aria-expanded="false">
+      
+      <!-- Botón con avatar que alterna el menú desplegable del usuario -->
+      <button (click)="dropdownOpen = !dropdownOpen" type="button"
+        class="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300"
+        aria-expanded="false">
+        
+        <!-- Círculo con la inicial del nombre de usuario -->
         <div class="w-8 h-8 rounded-full bg-green-700 text-white flex items-center justify-center font-bold uppercase">
           {{ nombreUsuario.charAt(0) }}
         </div>
       </button>
-      <div *ngIf="dropdownOpen" class="z-50 absolute right-0 top-12 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow">
+
+      <!-- Menú desplegable con opciones del usuario -->
+      <div *ngIf="dropdownOpen"
+        class="z-50 absolute right-0 top-12 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow">
+        
+        <!-- Información del usuario -->
         <div class="px-4 py-3">
           <span class="block text-sm text-gray-900">{{nombreUsuario}}</span>
           <span class="block text-sm font-medium text-gray-500 truncate">{{emailUsuario}}</span>
         </div>
+
+        <!-- Opciones del menú de usuario -->
         <ul class="py-2">
           <li><a routerLink="/perfil" class="block px-4 py-2 hover:bg-green-100 text-gray-700">Perfil</a></li>
           <li><a [routerLink]="'/salas'" class="block px-4 py-2 hover:bg-green-100 text-gray-700">Salas</a></li>
@@ -21,20 +39,39 @@
           <li><a (click)="logout()" class="block px-4 py-2 hover:bg-green-100 text-gray-700 cursor-pointer">Cerrar sesión</a></li>
         </ul>
       </div>
-      <button (click)="toggleMobileMenu()" type="button" class="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg md:hidden hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-300">
+
+      <!-- Botón para abrir/cerrar el menú móvil (solo visible en pantallas pequeñas) -->
+      <button (click)="toggleMobileMenu()" type="button"
+        class="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg md:hidden hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-300">
         <i class="fas" [ngClass]="mobileMenuOpen ? 'fa-times' : 'fa-bars'"></i>
       </button>
     </div>
-    <div [ngClass]="{'hidden': !mobileMenuOpen}" class="items-center justify-between w-full md:flex md:w-auto md:order-1">
-      <ul class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-[#A8E6CF] md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-[#A8E6CF]">
-        <li><a routerLink="/inicio" routerLinkActive="text-green-700" class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-green-100 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0">Inicio</a></li>
-        <li><a routerLink="/usuarios" routerLinkActive="text-green-700" class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-green-100 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0">Usuarios</a></li>
-        <li><a routerLink="/salas" routerLinkActive="text-green-700" class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-green-100 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0">Salas</a></li>
-        <li><a routerLink="/reservas" routerLinkActive="text-green-700" class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-green-100 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0">Reservas</a></li>
-        <li><a routerLink="/reservas_sin_salas" routerLinkActive="text-green-700" class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-green-100 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0">Reservas sin salas</a></li>
-        <li><a routerLink="/about" routerLinkActive="text-green-700" class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-green-100 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0">Acerca</a></li>
+
+    <!-- Menú de navegación (se oculta en móviles hasta que se abre) -->
+    <div [ngClass]="{'hidden': !mobileMenuOpen}"
+      class="items-center justify-between w-full md:flex md:w-auto md:order-1">
+      <ul
+        class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-[#A8E6CF] md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-[#A8E6CF]">
+
+        <!-- Enlaces de navegación -->
+        <li><a routerLink="/inicio" routerLinkActive="text-green-700"
+          class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-green-100 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0">Inicio</a></li>
+
+        <li><a routerLink="/usuarios" routerLinkActive="text-green-700"
+          class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-green-100 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0">Usuarios</a></li>
+
+        <li><a routerLink="/salas" routerLinkActive="text-green-700"
+          class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-green-100 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0">Salas</a></li>
+
+        <li><a routerLink="/reservas" routerLinkActive="text-green-700"
+          class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-green-100 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0">Reservas</a></li>
+
+        <li><a routerLink="/reservas_sin_salas" routerLinkActive="text-green-700"
+          class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-green-100 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0">Reservas sin salas</a></li>
+
+        <li><a routerLink="/about" routerLinkActive="text-green-700"
+          class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-green-100 md:hover:bg-transparent md:border-0 md:hover:text-green-700 md:p-0">Acerca</a></li>
       </ul>
     </div>
   </div>
 </nav>
- 

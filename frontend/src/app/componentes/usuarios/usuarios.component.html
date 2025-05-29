@@ -1,77 +1,117 @@
+<!-- Contenedor principal centrado con márgenes y paddings responsivos -->
 <div class="container mx-auto px-4 mt-10">
-    <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
-      <div class="flex items-center gap-2 w-full md:w-auto">
+  
+  <!-- Encabezado con buscador y botón de agregar usuario -->
+  <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
+    
+    <!-- Campo de búsqueda -->
+    <div class="flex items-center gap-2 w-full md:w-auto">
+      <input
+        type="text"
+        placeholder="Buscar usuario..."
+        [(ngModel)]="filtroBusqueda"            
+        (input)="filtrarUsuarios()"               
+        class="border border-gray-300 rounded px-3 py-2 w-full md:w-64 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+      />
+    </div>
+
+    <!-- Botón para abrir el modal de agregar usuario -->
+    <button class="btn" (click)="abrirModal()">Agregar Usuario</button>
+  </div>
+
+  <!-- Tabla de usuarios listados -->
+  <div class="overflow-x-auto">
+    <table class="min-w-full divide-y divide-gray-200">
+      <!-- Encabezado de la tabla -->
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+        </tr>
+      </thead>
+      
+      <!-- Cuerpo de la tabla con datos filtrados -->
+      <tbody class="bg-white divide-y divide-gray-200">
+        <tr *ngFor="let usuario of usuariosFiltrados">
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ usuario.name }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ usuario.email }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+            
+            <!-- Botones de acción: Editar y Eliminar -->
+            <div class="flex items-center space-x-2">
+              <!-- Botón Editar -->
+              <button
+                (click)="editarUsuario(usuario)"
+                class="flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1 rounded-md shadow-md transition"
+              >
+                <i class="fas fa-edit"></i>
+                <span class="hidden sm:inline">Editar</span>
+              </button>
+
+              <!-- Botón Eliminar -->
+              <button
+                (click)="eliminarUsuario(usuario.id)"
+                class="flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md shadow-md transition"
+              >
+                <i class="fas fa-trash-alt"></i>
+                <span class="hidden sm:inline">Eliminar</span>
+              </button>
+            </div>
+
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal para agregar o editar un usuario -->
+<div *ngIf="modalAbierto" class="fixed inset-0 flex justify-center items-center bg-gray-900 bg-opacity-50 z-50">
+  <div class="bg-white rounded-lg p-6 w-full max-w-lg">
+    
+    <!-- Título del modal -->
+    <h2 class="text-xl font-semibold mb-4">{{ esEdicion ? 'Editar Usuario' : 'Agregar Usuario' }}</h2>
+
+    <!-- Formulario de usuario -->
+    <form (ngSubmit)="guardarUsuario()">
+
+      <!-- Campo: Nombre -->
+      <div class="mb-4">
+        <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
         <input
+          id="name"
+          [(ngModel)]="nuevaUsuario.name"
+          name="nombre"
+          required
           type="text"
-          placeholder="Buscar usuario..."
-          [(ngModel)]="filtroBusqueda"
-          (input)="filtrarUsuarios()"
-          class="border border-gray-300 rounded px-3 py-2 w-full md:w-64 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500"
         />
       </div>
-      <button class="btn" (click)="abrirModal()">Agregar Usuario</button>
-    </div>
-  
-    <!-- Tabla de usuarios -->
-    <div class="overflow-x-auto">
-      <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
-          <tr>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
-          </tr>
-        </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
-          <tr *ngFor="let usuario of usuariosFiltrados">
-            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ usuario.name }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ usuario.email }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-              <div class="flex items-center space-x-2">
-                <!-- Botón Editar -->
-                <button
-                  (click)="editarUsuario(usuario)"
-                  class="flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1 rounded-md shadow-md transition"
-                >
-                  <i class="fas fa-edit"></i>
-                  <span class="hidden sm:inline">Editar</span>
-                </button>
-              
-                <!-- Botón Eliminar -->
-                <button
-                  (click)="eliminarUsuario(usuario.id)"
-                  class="flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md shadow-md transition"
-                >
-                  <i class="fas fa-trash-alt"></i>
-                  <span class="hidden sm:inline">Eliminar</span>
-                </button>
-              </div>
-              
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+
+      <!-- Campo: Email -->
+      <div class="mb-4">
+        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+        <input
+          id="email"
+          [(ngModel)]="nuevaUsuario.email"
+          name="email"
+          required
+          type="email"
+          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500"
+        />
+      </div>
+
+      <!-- Botones del modal -->
+      <div class="flex justify-between">
+        <!-- Cancelar -->
+        <button type="button" (click)="cerrarModal()" class="bg-gray-400 text-white px-4 py-2 rounded">Cancelar</button>
+        <!-- Guardar / Actualizar -->
+        <button type="submit" class="bg-emerald-500 text-white px-4 py-2 rounded">
+          {{ esEdicion ? 'Actualizar' : 'Guardar' }}
+        </button>
+      </div>
+
+    </form>
   </div>
-  
-  <!-- Modal de Agregar/Editar Usuario -->
-  <div *ngIf="modalAbierto" class="fixed inset-0 flex justify-center items-center bg-gray-900 bg-opacity-50 z-50">
-    <div class="bg-white rounded-lg p-6 w-full max-w-lg">
-      <h2 class="text-xl font-semibold mb-4">{{ esEdicion ? 'Editar Usuario' : 'Agregar Usuario' }}</h2>
-      <form (ngSubmit)="guardarUsuario()">
-        <div class="mb-4">
-          <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
-          <input id="name" [(ngModel)]="nuevaUsuario.name" name="nombre" required type="text" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500" />
-        </div>
-        <div class="mb-4">
-          <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-          <input id="email" [(ngModel)]="nuevaUsuario.email" name="email" required type="email" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500" />
-        </div>
-        <div class="flex justify-between">
-          <button type="button" (click)="cerrarModal()" class="bg-gray-400 text-white px-4 py-2 rounded">Cancelar</button>
-          <button type="submit" class="bg-emerald-500 text-white px-4 py-2 rounded">{{ esEdicion ? 'Actualizar' : 'Guardar' }}</button>
-        </div>
-      </form>
-    </div>
-  </div>
-  
+</div>

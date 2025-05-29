@@ -15,13 +15,28 @@ import Swal from 'sweetalert2';
   styleUrl: './reservas-sin-sala.component.css'
 })
 export class ReservasSinSalaComponent implements OnInit {
+  // Lista completa de reservas sin sala
   reservasSinSala: any[] = [];
+
+  // Lista filtrada que se muestra en la tabla
   reservasSinSalaFiltradas: any[] = [];
+
+  // Texto del input de búsqueda
   filtroBusqueda: string = '';
+
+  // Controla si el modal de asignación está abierto
   modalAsignarAbierto: boolean = false;
+
+  // Reserva actualmente seleccionada para asignar sala
   reservaAsignar: any = null;
+
+  // Filtro por nombre de sala
   busquedaSala: string = '';
+
+  // Filtro por capacidad mínima de la sala
   busquedaCapacidad: number | null = null;
+
+  // Objeto parcial para la reserva a actualizar (solo campos necesarios)
   nuevaReserva: Partial<Reserva> = {
     sala_id: 0,
     user_id: 0,
@@ -30,24 +45,28 @@ export class ReservasSinSalaComponent implements OnInit {
     hora_inicio: '', 
     fin: ''
   };
+
+  // Lista completa de salas cargadas desde la API
   salas: Sala[] = [];
+
+  // Paso actual en el proceso de asignación (se puede ampliar si se agregan pasos)
   currentStep: number = 1;
 
   constructor(private apiService: ApiService) {}
 
-
-
+  // Se ejecuta al iniciar el componente
   ngOnInit() {
     if (typeof window !== 'undefined') {
       const token = sessionStorage.getItem('token');
       if (token) {
         this.cargarReservasSinSala();
-
       } else {
         console.warn('Token no disponible todavía, no se llamó a cargarReservasSinSala().');
       }
     }
   }
+
+  // Carga todas las salas desde el backend
   cargarSalas(): void {
     this.apiService.obtenerSalas().subscribe(
       (res) => {
@@ -58,12 +77,14 @@ export class ReservasSinSalaComponent implements OnInit {
       }
     );
   }
-  
+
+  // Obtiene el nombre de una sala dado su ID
   obtenerNombreSala(id: number) {
     const sala = this.salas.find(s => s.id === id);
     return sala ? sala.nombre : '';
   }
 
+  // Filtra las salas según el texto y la capacidad ingresada
   salasFiltradas() {
     return this.salas.filter(sala => {
       const coincideNombre = sala.nombre.toLowerCase().includes(this.busquedaSala?.toLowerCase() || '');
@@ -72,10 +93,12 @@ export class ReservasSinSalaComponent implements OnInit {
     });
   }
 
+  // Asigna la sala seleccionada al objeto `nuevaReserva`
   seleccionarSala(sala: any) {
     this.nuevaReserva.sala_id = sala.id;
   }
 
+  // Carga todas las reservas sin sala desde la API
   cargarReservasSinSala(): void {
     this.apiService.getReservasSinSala().subscribe(
       (res) => {
@@ -88,6 +111,7 @@ export class ReservasSinSalaComponent implements OnInit {
     );
   }
 
+  // Filtra reservas sin sala por nombre de usuario o ID
   filtrarReservasSinSala(): void {
     const filtro = this.filtroBusqueda.toLowerCase();
     this.reservasSinSalaFiltradas = this.reservasSinSala.filter((reserva) =>
@@ -95,12 +119,14 @@ export class ReservasSinSalaComponent implements OnInit {
     );
   }
 
+  // Cierra el modal de asignación de sala y reinicia los datos
   cerrarModalAsignar() {
     this.modalAsignarAbierto = false;
     this.reservaAsignar = null;
     this.nuevaReserva = {};
   }
-  
+
+  // Confirma la asignación de sala a la reserva seleccionada
   confirmarAsignacionSala() {
     if (this.reservaAsignar && this.nuevaReserva.sala_id) {
       this.apiService.actualizarSalaEnReserva(this.reservaAsignar.id, this.nuevaReserva.sala_id).subscribe(
@@ -126,8 +152,8 @@ export class ReservasSinSalaComponent implements OnInit {
       );
     }
   }
-  
 
+  // Abre el modal de asignación y prepara los datos necesarios
   asignarSala(reserva: any) {
     this.reservaAsignar = { ...reserva };
     this.nuevaReserva = {
@@ -138,18 +164,31 @@ export class ReservasSinSalaComponent implements OnInit {
     this.busquedaCapacidad = null;
     this.modalAsignarAbierto = true;
     this.currentStep = 1;
-  
     this.cargarSalas();
   }
-  
-  
-  
+
+  // Elimina una reserva sin sala previa confirmación del usuario
   eliminarReserva(id: number) {
-    if (confirm('¿Estás seguro de eliminar esta reserva?')) {
-      this.apiService.eliminarReserva(id).subscribe(() => {
-        this.cargarReservasSinSala(); 
-      });
-    } 
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Esta acción eliminará la reserva permanentemente.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.apiService.eliminarReserva(id).subscribe({
+          next: () => {
+            Swal.fire('Eliminada', 'La reserva fue eliminada correctamente.', 'success');
+            this.cargarReservasSinSala(); // refrescar datos
+          },
+          error: (error) => {
+            console.error('Error al eliminar reserva', error);
+            Swal.fire('Error', 'No se pudo eliminar la reserva.', 'error');
+          }
+        });
+      }
+    });
   }
-  
 }

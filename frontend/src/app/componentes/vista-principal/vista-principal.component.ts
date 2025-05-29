@@ -15,11 +15,15 @@ import * as FileSaver from 'file-saver';
   styleUrl: './vista-principal.component.css'
 })
 export class VistaPrincipalComponent implements AfterViewInit, OnInit {
-  reservas: Reserva[] = [];
+  
+  reservas: Reserva[] = []; // Arreglo para almacenar las reservas obtenidas del backend
 
   constructor(private apiService: ApiService) {}
 
-
+  /**
+   * ngOnInit - se ejecuta al inicializar el componente
+   * Comprueba si hay token en sessionStorage para obtener reservas
+   */
   ngOnInit() {
     if (typeof window !== 'undefined') {
       const token = sessionStorage.getItem('token');
@@ -30,8 +34,11 @@ export class VistaPrincipalComponent implements AfterViewInit, OnInit {
       }
     }
   }
-  
 
+  /**
+   * ngAfterViewInit - se ejecuta después de que el componente fue renderizado
+   * Solo inicializa las gráficas si hay token disponible
+   */
   ngAfterViewInit(): void {
     if (typeof window !== 'undefined') {
       const token = sessionStorage.getItem('token');
@@ -44,8 +51,11 @@ export class VistaPrincipalComponent implements AfterViewInit, OnInit {
       }
     }
   }
-  
 
+  /**
+   * Llama al servicio para obtener las reservas desde el backend
+   * Al recibirlas, actualiza el array local y genera las gráficas
+   */
   obtenerReservas(): void {
     this.apiService.obtenerReservas2().subscribe({
       next: (data) => {
@@ -60,52 +70,51 @@ export class VistaPrincipalComponent implements AfterViewInit, OnInit {
     });
   }
 
+  /**
+   * Genera un gráfico de líneas con la cantidad de reservas por sala a lo largo de la semana
+   */
   private initLineChart(): void {
     const chartDom = document.getElementById('chart-line'); 
     if (!chartDom) return;
-    
+
     const instanciaExistente = echarts.getInstanceByDom(chartDom);
     if (instanciaExistente) {
       echarts.dispose(chartDom);
     }
-    
+
     const myChart = echarts.init(chartDom);
     const dias = ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'];
-  
+
     const hoy = new Date();
     const startOfWeek = new Date(hoy);
-    startOfWeek.setDate(hoy.getDate() - hoy.getDay()); 
+    startOfWeek.setDate(hoy.getDate() - hoy.getDay());
     const endOfWeek = new Date(startOfWeek);
-    endOfWeek.setDate(startOfWeek.getDate() + 6); 
-  
+    endOfWeek.setDate(startOfWeek.getDate() + 6);
+
     const conteoPorSala: { [salaNombre: string]: number[] } = {};
-  
+
     this.reservas.forEach((reserva: any) => {
       const fecha = new Date(reserva.inicio);
       const sala = reserva.sala?.nombre;
-  
       if (!sala || fecha < startOfWeek || fecha > endOfWeek) return;
-  
+
       if (!conteoPorSala[sala]) {
-        conteoPorSala[sala] = [0, 0, 0, 0, 0, 0, 0]; 
+        conteoPorSala[sala] = [0, 0, 0, 0, 0, 0, 0];
       }
-  
-      const dia = fecha.getDay(); 
+
+      const dia = fecha.getDay();
       conteoPorSala[sala][dia]++;
     });
-  
-    
+
     const series = Object.keys(conteoPorSala).map((salaNombre) => ({
       name: salaNombre,
       type: 'line',
       data: conteoPorSala[salaNombre]
     }));
-  
+
     const option = {
       tooltip: { trigger: 'axis' },
-      legend: {
-        data: Object.keys(conteoPorSala)
-      },
+      legend: { data: Object.keys(conteoPorSala) },
       grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
       toolbox: { feature: { saveAsImage: {} } },
       xAxis: {
@@ -116,39 +125,37 @@ export class VistaPrincipalComponent implements AfterViewInit, OnInit {
       yAxis: { type: 'value' },
       series: series
     };
-  
+
     myChart.setOption(option);
   }
-  
-  
-  
+
+  /**
+   * Genera un gráfico de pastel mostrando el número de reservas por sala
+   */
   private initPieChart(): void {
     const chartDom = document.getElementById('chart-pie'); 
     if (!chartDom) return;
-    
+
     const instanciaExistente = echarts.getInstanceByDom(chartDom);
     if (instanciaExistente) {
       echarts.dispose(chartDom);
     }
-    
+
     const myChart = echarts.init(chartDom);
-  
     const conteoSalas: { [nombre: string]: number } = {};
-  
+
     this.reservas.forEach((reserva: any) => {
       if (!reserva.sala || !reserva.sala.nombre) return;
-  
       const nombreSala = reserva.sala.nombre;
-  
       if (!conteoSalas[nombreSala]) conteoSalas[nombreSala] = 0;
       conteoSalas[nombreSala]++;
     });
-  
+
     const dataSeries = Object.entries(conteoSalas).map(([nombre, cantidad]) => ({
       name: nombre,
       value: cantidad
     }));
-    
+
     const option = {
       tooltip: { trigger: 'item' },
       legend: { top: '5%', left: 'center' },
@@ -171,32 +178,33 @@ export class VistaPrincipalComponent implements AfterViewInit, OnInit {
         }
       ]
     };
-  
+
     myChart.setOption(option);
   }
-  
-  
+
+  /**
+   * Genera un gráfico de barras con los 6 usuarios que más han reservado este mes
+   */
   private initBarChart(): void {
     const chartDom = document.getElementById('chart-bar'); 
     if (!chartDom) return;
-    
+
     const instanciaExistente = echarts.getInstanceByDom(chartDom);
     if (instanciaExistente) {
       echarts.dispose(chartDom);
     }
-    
+
     const myChart = echarts.init(chartDom);
-    
-  
+
     const hoy = new Date();
-    const mesActual = hoy.getMonth(); 
+    const mesActual = hoy.getMonth();
     const añoActual = hoy.getFullYear();
-  
+
     const conteoUsuarios: { [nombre: string]: number } = {};
-  
+
     this.reservas.forEach((reserva: any) => {
       if (!reserva.inicio || !reserva.user?.name) return;
-  
+
       const fechaParts = reserva.inicio.split(/[- :]/);
       const fecha = new Date(
         parseInt(fechaParts[0]),
@@ -206,56 +214,47 @@ export class VistaPrincipalComponent implements AfterViewInit, OnInit {
         parseInt(fechaParts[4]),
         parseInt(fechaParts[5])
       );
-  
-      if (
-        fecha.getMonth() === mesActual &&
-        fecha.getFullYear() === añoActual
-      ) {
+
+      if (fecha.getMonth() === mesActual && fecha.getFullYear() === añoActual) {
         const nombre = reserva.user.name;
         if (!conteoUsuarios[nombre]) conteoUsuarios[nombre] = 0;
         conteoUsuarios[nombre]++;
       }
     });
-  
+
     const topUsuarios = Object.entries(conteoUsuarios)
       .sort((a, b) => b[1] - a[1])
       .slice(0, 6);
-  
+
     const nombres = topUsuarios.map(([nombre]) => nombre);
     const cantidades = topUsuarios.map(([_, cantidad]) => cantidad);
-  
-  
+
     const option = {
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: { type: 'shadow' }
-      },
+      tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
       xAxis: {
         type: 'category',
         data: nombres,
         axisLabel: { interval: 0, rotate: 20 }
       },
-      yAxis: {
-        type: 'value'
-      },
+      yAxis: { type: 'value' },
       series: [
         {
           data: cantidades,
           type: 'bar',
-          itemStyle: {
-            color: '#3b82f6'
-          }
+          itemStyle: { color: '#3b82f6' }
         }
       ]
     };
-  
+
     myChart.setOption(option);
   }
 
+  /**
+   * Exporta las reservas actuales a un archivo Excel (.xlsx)
+   */
   generarExcel(): void {
     const reservasExport = this.reservas.map(res => {
-      const reserva: any = res; 
-  
+      const reserva: any = res;
       return {
         ID: reserva['id'],
         Sala: reserva['sala']?.['nombre'],
@@ -267,17 +266,16 @@ export class VistaPrincipalComponent implements AfterViewInit, OnInit {
         'Última Actualización': reserva['updated_at']
       };
     });
-  
+
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(reservasExport);
     const workbook: XLSX.WorkBook = {
       Sheets: { 'Reservas': worksheet },
       SheetNames: ['Reservas']
     };
-  
+
     const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
     const data: Blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
     FileSaver.saveAs(data, 'reservas.xlsx');
   }
-  
-  
+
 }

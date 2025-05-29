@@ -1,7 +1,8 @@
 <div class="container mx-auto px-4 mt-10">
+  <!-- Filtros y botón para agregar sala -->
   <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
     <div class="flex items-center gap-2 w-full md:w-auto">
-      <!-- Input de búsqueda -->
+      <!-- Input de búsqueda por nombre de sala -->
       <input
         type="text"
         placeholder="Buscar sala..."
@@ -9,8 +10,8 @@
         (input)="filtrarSalas()"
         class="border border-gray-300 rounded px-3 py-2 w-full md:w-64 focus:outline-none focus:ring-2 focus:ring-emerald-400"
       />
-      
-      <!-- Filtro de disponibilidad -->
+
+      <!-- Select para filtrar salas por disponibilidad -->
       <select
         [(ngModel)]="filtroDisponibilidad"
         (change)="filtrarSalas()"
@@ -21,18 +22,25 @@
         <option value="0">No disponibles</option>
       </select>
     </div>
+
+    <!-- Botón para abrir el modal de agregar/editar sala -->
     <button class="btn" (click)="abrirModal()">Agregar Sala</button>
   </div>
 
-  <!-- Modal -->
+  <!-- Modal para agregar o editar sala -->
   <div
     class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
     *ngIf="mostrarModal"
   >
     <div class="bg-white rounded-lg p-6 w-full max-w-md shadow-lg">
+      <!-- Título del modal -->
       <h2 class="text-lg font-semibold mb-4">
         {{ editando ? 'Editar Sala' : 'Nueva Sala' }}
-      </h2>      <form (ngSubmit)="guardarSala()">
+      </h2>
+
+      <!-- Formulario de la sala -->
+      <form (ngSubmit)="guardarSala()">
+        <!-- Campo para nombre de la sala -->
         <div class="mb-4">
           <label class="block text-sm font-medium mb-1">Nombre:</label>
           <input
@@ -43,6 +51,8 @@
             class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-400"
           />
         </div>
+
+        <!-- Campo para capacidad -->
         <div class="mb-4">
           <label class="block text-sm font-medium mb-1">Capacidad:</label>
           <input
@@ -53,6 +63,8 @@
             class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-400"
           />
         </div>
+
+        <!-- Campo para disponibilidad -->
         <div class="mb-4">
           <label class="block text-sm font-medium mb-1">Disponible:</label>
           <select
@@ -65,15 +77,23 @@
             <option [value]="0">No</option>
           </select>
         </div>
+
+        <!-- Botones para cancelar o guardar -->
         <div class="flex justify-end space-x-2">
-          <button type="button" (click)="cerrarModal()" class="px-4 py-2 rounded bg-gray-300 text-gray-800 hover:bg-gray-400">Cancelar</button>
+          <button
+            type="button"
+            (click)="cerrarModal()"
+            class="px-4 py-2 rounded bg-gray-300 text-gray-800 hover:bg-gray-400"
+          >
+            Cancelar
+          </button>
           <button type="submit" class="btn">Guardar</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- Tabla de salas -->
+  <!-- Tabla de salas registradas -->
   <div class="overflow-x-auto">
     <table class="min-w-full divide-y divide-gray-200">
       <thead class="bg-gray-50">
@@ -85,6 +105,7 @@
         </tr>
       </thead>
       <tbody class="bg-white divide-y divide-gray-200">
+        <!-- Recorre y muestra cada sala -->
         <tr *ngFor="let sala of salasFiltradas">
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ sala.nombre }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ sala.capacidad }}</td>
@@ -101,7 +122,7 @@
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
             <div class="flex items-center space-x-2">
-              <!-- Botón Editar Sala -->
+              <!-- Botón para editar sala -->
               <button
                 (click)="editarSala(sala)"
                 class="flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1 rounded-md shadow-md transition"
@@ -109,8 +130,8 @@
                 <i class="fas fa-edit"></i>
                 <span class="hidden sm:inline">Editar</span>
               </button>
-            
-              <!-- Botón Eliminar Sala -->
+
+              <!-- Botón para eliminar sala -->
               <button
                 (click)="eliminarSala(sala.id)"
                 class="flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md shadow-md transition"
@@ -119,7 +140,6 @@
                 <span class="hidden sm:inline">Eliminar</span>
               </button>
             </div>
-            
           </td>
         </tr>
       </tbody>
