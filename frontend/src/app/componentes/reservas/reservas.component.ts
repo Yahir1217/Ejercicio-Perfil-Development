@@ -284,23 +284,20 @@ export class ReservasComponent implements OnInit {
     return true;
   }
   
-  formatearFechaConZona(date: Date, timeZone: string = 'America/Mazatlan'): string {
-    const formatter = new Intl.DateTimeFormat('en-CA', {
-      timeZone,
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false
-    });
+  formatearFechaConZona(fecha: Date): string {
+    // Esto mantiene la hora local en formato 'YYYY-MM-DD HH:mm:ss'
+    const pad = (n: number) => n < 10 ? '0' + n : n;
   
-    const parts = formatter.formatToParts(date);
-    const get = (type: string) => parts.find(p => p.type === type)?.value ?? '00';
+    const año = fecha.getFullYear();
+    const mes = pad(fecha.getMonth() + 1);
+    const dia = pad(fecha.getDate());
+    const hora = pad(fecha.getHours());
+    const minutos = pad(fecha.getMinutes());
+    const segundos = pad(fecha.getSeconds());
   
-    return `${get('year')}-${get('month')}-${get('day')} ${get('hour')}:${get('minute')}:${get('second')}`;
+    return `${año}-${mes}-${dia} ${hora}:${minutos}:${segundos}`;
   }
+  
   
 
   guardarReserva() {
@@ -372,7 +369,7 @@ export class ReservasComponent implements OnInit {
           }
         }
       });
-    }
+    } 
   }
   
   cerrarModal() {

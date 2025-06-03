@@ -35,6 +35,11 @@ class Reserva extends Model
      */
     protected $fillable = ['user_id', 'sala_id', 'inicio', 'fin', 'activa'];
 
+    protected $casts = [
+        'inicio' => 'datetime',
+        'fin' => 'datetime',
+    ];
+
     /**
      * Relación: una reserva pertenece a un usuario.
      *

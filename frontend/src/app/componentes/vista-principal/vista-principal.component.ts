@@ -34,7 +34,7 @@ export class VistaPrincipalComponent implements AfterViewInit, OnInit {
       }
     }
   }
-
+ 
   /**
    * ngAfterViewInit - se ejecuta después de que el componente fue renderizado
    * Solo inicializa las gráficas si hay token disponible

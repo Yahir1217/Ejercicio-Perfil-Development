@@ -1,9 +1,8 @@
 <?php
 
 namespace App\Console\Commands;
+
 use App\Models\Reserva;
-use App\Models\User;
-use App\Models\Sala;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Console\Command;
 
@@ -21,7 +20,7 @@ class EnviarRecordatorioReserva extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Envía un correo recordatorio 15 minutos antes del inicio de una reserva';
 
     /**
      * Execute the console command.
@@ -29,11 +28,21 @@ class EnviarRecordatorioReserva extends Command
     public function handle()
     {
         $ahora = now();
-        $reservas = Reserva::where('inicio', $ahora->copy()->addMinutes(15)->format('Y-m-d H:i:00'))->get();
+    
+        // Asegura que cargamos las relaciones correctas: 'user' y 'sala'
+        $reservas = Reserva::with(['user', 'sala'])
+            ->where('inicio', $ahora->copy()->addMinutes(15)->format('Y-m-d H:i:00'))
+            ->get();
     
         foreach ($reservas as $reserva) {
-            $user = $reserva->usuario; // Asegúrate de tener relación con User
-            $sala = $reserva->sala;    // Asegúrate de tener relación con Sala
+            $user = $reserva->user;
+            $sala = $reserva->sala;
+    
+            // Validar que existan relaciones
+            if (!$user || !$sala) {
+                $this->warn("Reserva ID {$reserva->id} no tiene usuario o sala asociado. Se omitió.");
+                continue;
+            }
     
             Mail::send('emails.recordatorio', [
                 'usuario' => $user->name,
@@ -44,7 +53,10 @@ class EnviarRecordatorioReserva extends Command
                 $message->to($user->email)
                         ->subject('¡Tu reserva está por comenzar!');
             });
+    
+            $this->info("Correo enviado a {$user->email} por la reserva ID {$reserva->id}.");
         }
     }
+    
     
 }

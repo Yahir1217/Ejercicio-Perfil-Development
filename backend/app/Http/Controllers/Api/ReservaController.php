@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
+
 class ReservaController extends Controller
 {
     /**
@@ -30,12 +31,16 @@ class ReservaController extends Controller
             ->whereNotNull('sala_id')
             ->get()
             ->map(function ($reserva) {
+                $inicio = Carbon::parse($reserva->fecha . ' ' . $reserva->hora_inicio);
+                [$horas, $minutos] = explode(':', $reserva->duracion);
+                $fin = $inicio->copy()->addHours((int) $horas)->addMinutes((int) $minutos);
+    
                 return [
                     'id' => $reserva->id,
                     'user_id' => $reserva->user_id,
                     'sala_id' => $reserva->sala_id,
-                    'inicio' => $reserva->inicio,
-                    'fin' => $reserva->fin,
+                    'inicio' => $inicio->toIso8601String(),
+                    'fin' => $fin->format('H:i'), // Solo hora en formato 24 hrs
                     'activa' => $reserva->activa,
                     'created_at' => $reserva->created_at,
                     'updated_at' => $reserva->updated_at,
@@ -46,7 +51,7 @@ class ReservaController extends Controller
                     'sala' => $reserva->sala,
                 ];
             });
-    }
+    }        
 
     /**
      * Crea una nueva reserva, validando que no haya solapamiento con otras reservas de la misma sala.
